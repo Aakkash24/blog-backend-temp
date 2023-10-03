@@ -53,9 +53,18 @@ const updateBlogViews = async(req:Request,res:Response)=>{
 }
 
 const uploadImage = async(req:any,res:any) => {
-    uploadImg(req.body.image)
-    .then((url:any)=>{res.send({url:url})})
-    .catch((err:any)=>console.log(err))
+    const base64 = req.body.base64;
+    console.log(typeof base64);
+    try{
+        const img:any = await Image.create({data:base64})
+        console.log(img);
+        const data = await img.data
+        console.log(typeof data);
+        res.json({data});
+    }
+    catch(err){
+        res.status(400).json({msg:"Upload failed"})
+    }
 }
 
 const createBlog = async(req:any,res:any) => {
